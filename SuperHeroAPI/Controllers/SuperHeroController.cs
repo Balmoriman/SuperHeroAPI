@@ -55,9 +55,29 @@ namespace SuperHeroAPI.Controllers
             return Ok(await _dataContext.SuperHeroes.ToListAsync());
         }
 
-        //metodo para actulizar
+        //metodo para actualizar
+        [HttpPut]
+        public async Task<ActionResult<List<SuperHero>>> UpdateHero(SuperHero hero)
+        {
+            var onehero = await _dataContext.SuperHeroes.FindAsync(hero.Id);
+            if (onehero == null)
+            {
+                return NotFound("Hero not Found");
+            }
+
+            onehero.Name = hero.Name;
+            onehero.FirstName = hero.FirstName;
+            onehero.LastName = hero.LastName;
+            onehero.Place = hero.Place;
+
+            await _dataContext.SaveChangesAsync();
+
+            return Ok(await _dataContext.SuperHeroes.ToListAsync());
+        }
+
+        //metodo para borrar
         [HttpDelete]
-        public async Task<ActionResult<List<SuperHero>>> DeleteHero(int Id) 
+        public async Task<ActionResult<List<SuperHero>>> DeleteHero(int Id)
         {
             var onehero = await _dataContext.SuperHeroes.FindAsync(Id);
             if (onehero == null)
